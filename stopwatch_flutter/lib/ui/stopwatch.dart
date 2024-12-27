@@ -13,7 +13,11 @@ class Stopwatch extends StatefulWidget {
 
 class _StopwatchState extends State<Stopwatch>
     with SingleTickerProviderStateMixin {
-  Duration _elapsed = Duration.zero;
+  Duration _previouslyElapsed = Duration.zero;
+  Duration _currentlyElapsed = Duration.zero;
+
+  Duration get _elapsed => _previouslyElapsed + _currentlyElapsed;
+  bool _isRunning = true;
   late final Ticker _ticker;
 
   @override
@@ -21,7 +25,7 @@ class _StopwatchState extends State<Stopwatch>
     super.initState();
     _ticker = createTicker((elapsed) {
       setState(() {
-        _elapsed = elapsed;
+        _currentlyElapsed = elapsed;
       });
     });
     _ticker.start();
@@ -31,6 +35,30 @@ class _StopwatchState extends State<Stopwatch>
   void dispose() {
     _ticker.dispose();
     super.dispose();
+  }
+
+  void _reset() {
+    _ticker.stop();
+    setState(() {
+      _previouslyElapsed = Duration.zero;
+      _currentlyElapsed = Duration.zero;
+    });
+    if (_isRunning) {
+      _ticker.start();
+    }
+  }
+
+  void _toggleStartStop() {
+    setState(() {
+      _isRunning = !_isRunning;
+      if (_isRunning) {
+        _ticker.start();
+      } else {
+        _ticker.stop();
+        _previouslyElapsed += _currentlyElapsed;
+        _currentlyElapsed = Duration.zero;
+      }
+    });
   }
 
   @override
@@ -49,7 +77,7 @@ class _StopwatchState extends State<Stopwatch>
               alignment: Alignment.bottomLeft,
               child: SizedBox.square(
                 dimension: buttonDimension,
-                child: ResetButton(),
+                child: ResetButton(onPressed: _reset),
               ),
             ),
             Align(
@@ -57,10 +85,8 @@ class _StopwatchState extends State<Stopwatch>
               child: SizedBox.square(
                 dimension: buttonDimension,
                 child: StartStopButton(
-                  isRunning: true,
-                  onPressed: () {
-                    _ticker.isActive ? _ticker.stop() : _ticker.start();
-                  },
+                  isRunning: _isRunning,
+                  onPressed: _toggleStartStop,
                 ),
               ),
             ),
