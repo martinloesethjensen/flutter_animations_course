@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stopwatch_flutter/ui/stopwatch.dart';
+import 'package:stopwatch_flutter/ui/stopwatch_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,7 +34,7 @@ class MyHomePage extends StatelessWidget {
             padding: EdgeInsets.all(32),
             child: AspectRatio(
               aspectRatio: .85,
-              child: Stopwatch(),
+              child: StopwatchView(),
             ),
           ),
         ),

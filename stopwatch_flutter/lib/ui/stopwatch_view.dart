@@ -4,14 +4,14 @@ import 'package:stopwatch_flutter/ui/reset_button.dart';
 import 'package:stopwatch_flutter/ui/start_stop_button.dart';
 import 'package:stopwatch_flutter/ui/stopwatch_renderer.dart';
 
-class Stopwatch extends StatefulWidget {
-  const Stopwatch({super.key});
+class StopwatchView extends StatefulWidget {
+  const StopwatchView({super.key});
 
   @override
-  State<Stopwatch> createState() => _StopwatchState();
+  State<StopwatchView> createState() => _StopwatchViewState();
 }
 
-class _StopwatchState extends State<Stopwatch>
+class _StopwatchViewState extends State<StopwatchView>
     with SingleTickerProviderStateMixin {
   Duration _previouslyElapsed = Duration.zero;
   Duration _currentlyElapsed = Duration.zero;
