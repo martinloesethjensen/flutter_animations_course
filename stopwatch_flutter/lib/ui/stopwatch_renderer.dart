@@ -3,7 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:stopwatch_flutter/ui/clock_hand.dart';
 import 'package:stopwatch_flutter/ui/clock_markers.dart';
-import 'package:stopwatch_flutter/ui/elapsed_time_text.dart';
+
+import 'elapsed_time_text.dart';
 
 class StopwatchRenderer extends StatelessWidget {
   const StopwatchRenderer({
