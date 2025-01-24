@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:stopwatch_flutter/ui/reset_button.dart';
 import 'package:stopwatch_flutter/ui/start_stop_button.dart';
 import 'package:stopwatch_flutter/ui/stopwatch_renderer.dart';
+import 'package:stopwatch_flutter/ui/stopwatch_ticker_ui.dart';
 
 class StopwatchView extends StatefulWidget {
   const StopwatchView({super.key});
@@ -11,26 +11,9 @@ class StopwatchView extends StatefulWidget {
   State<StopwatchView> createState() => _StopwatchViewState();
 }
 
-class _StopwatchViewState extends State<StopwatchView>
-    with SingleTickerProviderStateMixin {
-  late final Stopwatch _stopwatch;
-  late final Ticker _ticker;
-
-  @override
-  void initState() {
-    super.initState();
-    _stopwatch = Stopwatch()..start();
-    _ticker = createTicker((_) => setState(() {}))..start();
-  }
-
-  @override
-  void dispose() {
-    _ticker.dispose();
-    super.dispose();
-  }
-
-  void _toggleStartStop() =>
-      _stopwatch.isRunning ? _stopwatch.stop() : _stopwatch.start();
+class _StopwatchViewState extends State<StopwatchView> {
+  final GlobalKey<StopwatchTickerUiState> _tickerUiKey = GlobalKey();
+  bool _isRunning = true;
 
   @override
   Widget build(BuildContext context) {
@@ -38,17 +21,16 @@ class _StopwatchViewState extends State<StopwatchView>
     return LayoutBuilder(
       builder: (context, constraints) {
         final radius = constraints.maxWidth / 2;
+        final tickerUiState = _tickerUiKey.currentState;
         return Stack(
           children: [
-            StopwatchRenderer(
-              elapsed: _stopwatch.elapsed,
-              radius: radius,
-            ),
+            StopwatchRenderer(radius: radius),
+            StopwatchTickerUi(key: _tickerUiKey, radius: radius),
             Align(
               alignment: Alignment.bottomLeft,
               child: SizedBox.square(
                 dimension: buttonDimension,
-                child: ResetButton(onPressed: _stopwatch.reset),
+                child: ResetButton(onPressed: tickerUiState?.reset),
               ),
             ),
             Align(
@@ -56,8 +38,15 @@ class _StopwatchViewState extends State<StopwatchView>
               child: SizedBox.square(
                 dimension: buttonDimension,
                 child: StartStopButton(
-                  isRunning: _stopwatch.isRunning,
-                  onPressed: _toggleStartStop,
+                  isRunning: _isRunning,
+                  onPressed: () {
+                    setState(() {
+                      _isRunning
+                          ? tickerUiState?.stop()
+                          : tickerUiState?.start();
+                      _isRunning = !_isRunning;
+                    });
+                  },
                 ),
               ),
             ),
