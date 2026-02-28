@@ -13,6 +13,7 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   flutter_launcher_icons: ^0.14.4
+  flutter_svg: ^2.2.3
 
 dev_dependencies:
   flutter_test:
