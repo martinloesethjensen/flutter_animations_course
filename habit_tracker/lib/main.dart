@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/constants/app_assets.dart';
+import 'package:habit_tracker/constants/app_colors.dart';
+import 'package:habit_tracker/ui/home/home_page.dart';
+import 'package:habit_tracker/ui/theming/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,13 +13,16 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Habit Tracker',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Helvetica Neue'),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: AppTheme(
+        data: AppThemeData.defaultWithSwatch(AppColors.red),
+        child: const HomePage(),
+      ),
     );
   }
 }
